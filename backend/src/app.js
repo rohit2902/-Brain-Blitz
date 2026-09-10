@@ -9,6 +9,7 @@ import helmet from 'helmet';
 import errorHandler from './middlewares/errorHandler.middleware.js';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import path from 'path';
 
 
 dotenv.config();
@@ -22,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(helmet()); 
 app.use(passport.initialize());
+app.use(express.static("./public"));
 
 
 const allowedOrigins = [
@@ -61,6 +63,11 @@ passport.use(new GoogleStrategy(
     done(null, profile);
   }
 ));
+
+app.use("*name", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "index.html"));
+});
+
 app.use(errorHandler);
 
 app.set("etag", false);
