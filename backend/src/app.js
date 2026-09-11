@@ -10,6 +10,7 @@ import errorHandler from './middlewares/errorHandler.middleware.js';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import path from 'path';
+import { fileURLToPath } from "url";
 
 
 dotenv.config();
@@ -23,7 +24,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(helmet()); 
 app.use(passport.initialize());
-app.use(express.static("./public"));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use(express.static(path.join(__dirname, "..", "public")));
 
 
 const allowedOrigins = [
@@ -64,8 +67,10 @@ passport.use(new GoogleStrategy(
   }
 ));
 
-app.use("*name", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "index.html"));
+app.get("*", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "..", "public", "index.html")
+  );
 });
 
 app.use(errorHandler);
