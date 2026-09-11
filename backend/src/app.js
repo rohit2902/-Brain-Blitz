@@ -17,7 +17,7 @@ dotenv.config();
 
 const app = express();
 
-// Global middleware
+
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
