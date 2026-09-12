@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-     baseURL:"https://perplexity-rihg.onrender.com",
+     baseURL:"https://brain-blitz-xx0i.onrender.com",
     withCredentials: true,
 })
 
