@@ -54,7 +54,7 @@ const handleSubmit = async (e) => {
 };
 
   const GoogleLogin = () => {
-    window.location.href =  `https://perplexity-rihg.onrender.com/api/auth/google`; 
+    window.location.href =  `https://brain-blitz-xx0i.onrender.com/api/auth/google`; 
   };
 
   if (!loading && user) {
