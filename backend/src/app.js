@@ -31,7 +31,7 @@ app.use(express.static(path.join(__dirname, "..", "public")));
 
 const allowedOrigins = [
   process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.trim() : null,
-  'http://localhost:5173',
+  'https://brain-blitz-1.onrender.com',
   'http://localhost:5174'
 ].filter(Boolean);
 
