@@ -53,8 +53,9 @@ const handleSubmit = async (e) => {
   }
 };
 
-  const GoogleLogin = () => {
-    window.location.href =  `https://perplexity-rihg.onrender.com/api/auth/google`; 
+const GoogleLogin = () => {
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
+    window.location.href =  `${backendUrl}/api/auth/google`; 
   };
 
   if (!loading && user) {
