@@ -38,15 +38,13 @@ export const registerController = asyncHandler(async (req, res) => {
     process.env.JWT_SECRET_KEY,
     { expiresIn: "1d" },
   );
-  try {
-    await sendEmail({
-      to: email,
-      subject: "🎉 Welcome to Perplexity AI",
-      html: verifyEmail(user, emailVerifyToken),
-    });
-  } catch (emailError) {
-    throw new Error(`Failed to send verification email: ${emailError.message}`);
-  }
+  sendEmail({
+    to: email,
+    subject: "🎉 Welcome to Perplexity AI",
+    html: verifyEmail(user, emailVerifyToken),
+  }).catch((emailError) => {
+    console.error(`Failed to send verification email: ${emailError.message}`);
+  });
   const createdUser = await userModel.findById(user._id).select("-password");
 
   if (!createdUser) {
@@ -115,7 +113,7 @@ export const verifyEmailController = asyncHandler(async (req, res) => {
               <p style="font-size:16px;line-height:28px;">
                 Your email has been verified. Your BrainBlitz account is fully set up and ready to go.
               </p>
-               <div style="margin:40px 0;">
+              <div style="margin:40px 0;">
                 <a href="${process.env.FRONTED_URL || 'https://brain-blitz-1.onrender.com'}/login" style="display:inline-block;padding:14px 30px;background:#FF7A1A;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:bold;">
                   Go to Login
                 </a>
@@ -244,7 +242,7 @@ export const googleAuthController = asyncHandler(async (req, res) => {
   const googleId = userProfile.id;
   const username = userProfile.displayName;
   const avatar = userProfile.photos?.[0]?.value;
- if (!email) {
+  if (!email) {
     const frontendUrl = process.env.FRONTED_URL || "https://brain-blitz-1.onrender.com";
     return res.redirect(`${frontendUrl}/login?error=no_email`);
   }
@@ -278,7 +276,8 @@ export const googleAuthController = asyncHandler(async (req, res) => {
     sameSite: "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
-  res.redirect(process.env.FRONTED_URL + "/");
+  const frontendUrl = process.env.FRONTED_URL || "https://brain-blitz-1.onrender.com";
+  res.redirect(frontendUrl + "/");
 });
 
 export const forgetPasswordController = asyncHandler(async (req, res) => {

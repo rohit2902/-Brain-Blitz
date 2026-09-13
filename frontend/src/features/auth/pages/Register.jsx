@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate } from "react-router";
 import { useAuth } from "../hook/useAuth";
 import { useSelector } from "react-redux";
 import { Eye, EyeOff } from "lucide-react";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -27,10 +28,12 @@ const Register = () => {
       return;
     }
 
+    const toastId = toast.loading("Registering...");
     try {
       await handleRegister({ name, email, password });
-     
+      toast.success("Registration successful!", { id: toastId });
     } catch (error) {
+      toast.error("Registration failed", { id: toastId });
       const errorData = error.response?.data;
           if (errorData?.errors?.length > 0) {
       setError(errorData.errors[0].message);
