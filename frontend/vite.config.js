@@ -11,6 +11,11 @@ export default defineConfig({
         target: 'https://brain-blitz-xx0i.onrender.com',
         changeOrigin: true,
       },
+      '/socket.io': {
+        target: 'https://brain-blitz-xx0i.onrender.com',
+        changeOrigin: true,
+        ws: true,
+      }
     },
   },
 })
