@@ -115,8 +115,8 @@ export const verifyEmailController = asyncHandler(async (req, res) => {
               <p style="font-size:16px;line-height:28px;">
                 Your email has been verified. Your BrainBlitz account is fully set up and ready to go.
               </p>
-              <div style="margin:40px 0;">
-                <a href="${process.env.FRONTED_URL}/login" style="display:inline-block;padding:14px 30px;background:#FF7A1A;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:bold;">
+               <div style="margin:40px 0;">
+                <a href="${process.env.FRONTED_URL || 'https://brain-blitz-1.onrender.com'}/login" style="display:inline-block;padding:14px 30px;background:#FF7A1A;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:bold;">
                   Go to Login
                 </a>
               </div>
@@ -244,8 +244,9 @@ export const googleAuthController = asyncHandler(async (req, res) => {
   const googleId = userProfile.id;
   const username = userProfile.displayName;
   const avatar = userProfile.photos?.[0]?.value;
-  if (!email) {
-    return res.redirect(`${process.env.FRONTED_URL}/login?error=no_email`);
+ if (!email) {
+    const frontendUrl = process.env.FRONTED_URL || "https://brain-blitz-1.onrender.com";
+    return res.redirect(`${frontendUrl}/login?error=no_email`);
   }
 
   let user = await userModel.findOne({
