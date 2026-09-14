@@ -54,7 +54,7 @@ const handleSubmit = async (e) => {
 };
 
 const GoogleLogin = () => {
-  window.location.href = `/api/auth/google`;
+  window.location.href = "/api/auth/google";
 };
 
   if (!loading && user) {
