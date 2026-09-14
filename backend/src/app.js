@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import AuthRoutes from './routes/auth.route.js';
 import morgan from "morgan";
 import chatRoute from './routes/chat..route.js';
-import helmet from 'helmet';
+
 import errorHandler from './middlewares/errorHandler.middleware.js';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
@@ -22,20 +22,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        connectSrc: ["'self'"],
-        scriptSrc: ["'self'"],
-        // Google login ke liye zaroori ho sakta hai:
-        frameSrc: ["'self'", "https://accounts.google.com"],
-        imgSrc: ["'self'", "data:", "https://lh3.googleusercontent.com"],
-      },
-    },
-  })
-);
+
 app.use(passport.initialize());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
