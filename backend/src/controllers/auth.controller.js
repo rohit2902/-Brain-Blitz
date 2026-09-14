@@ -8,7 +8,7 @@ import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import crypto from "crypto";
 import { forgotPasswordTemplate } from "../services/email/forgot-password.template.js";
-import verifyEmail from "../services/email/verify-email.template.js";
+import verifyEmailTemplate from "../services/email/verify-email.template.js"
 
 export const registerController = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
@@ -30,18 +30,26 @@ export const registerController = asyncHandler(async (req, res) => {
       });
     }
   }
+  
 
   const user = await userModel.create({ username, email, password });
+  console.log("2. User created:", user.email);
 
   const emailVerifyToken = jwt.sign(
     { email: user.email },
     process.env.JWT_SECRET_KEY,
     { expiresIn: "1d" },
   );
-  sendEmail({
+
+  console.log("3. Verification token created");
+
+const emailHtml = verifyEmailTemplate(user, emailVerifyToken);
+
+
+ await sendEmail({
     to: email,
     subject: "🎉 Welcome to Perplexity AI",
-    html: verifyEmail(user, emailVerifyToken),
+    html: emailHtml
   }).catch((emailError) => {
     console.error(`Failed to send verification email: ${emailError.message}`);
   });
@@ -114,7 +122,7 @@ export const verifyEmailController = asyncHandler(async (req, res) => {
                 Your email has been verified. Your BrainBlitz account is fully set up and ready to go.
               </p>
               <div style="margin:40px 0;">
-                <a href="${process.env.FRONTED_URL || 'https://brain-blitz-1.onrender.com'}/login" style="display:inline-block;padding:14px 30px;background:#FF7A1A;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:bold;">
+                <a href="${process.env.FRONTEND_URL}/login" style="display:inline-block;padding:14px 30px;background:#FF7A1A;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:bold;">
                   Go to Login
                 </a>
               </div>
@@ -243,7 +251,7 @@ export const googleAuthController = asyncHandler(async (req, res) => {
   const username = userProfile.displayName;
   const avatar = userProfile.photos?.[0]?.value;
   if (!email) {
-    const frontendUrl = process.env.FRONTED_URL || "https://brain-blitz-1.onrender.com";
+    const frontendUrl = process.env.FRONTEND_URL ;
     return res.redirect(`${frontendUrl}/login?error=no_email`);
   }
 
@@ -263,7 +271,7 @@ export const googleAuthController = asyncHandler(async (req, res) => {
   } else if (!user.googleId) {
     user.googleId = googleId;
     user.avatar = user.avatar || avatar;
-
+     user.verified = true; 
     await user.save();
   }
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
@@ -276,7 +284,7 @@ export const googleAuthController = asyncHandler(async (req, res) => {
     sameSite: "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
-  const frontendUrl = process.env.FRONTED_URL || "https://brain-blitz-1.onrender.com";
+  const frontendUrl = process.env.FRONTEND_URL ;
   res.redirect(frontendUrl + "/");
 });
 

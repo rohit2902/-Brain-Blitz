@@ -8,11 +8,11 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://brain-blitz-xx0i.onrender.com',
+        target: 'http://localhost:3000',
         changeOrigin: true,
       },
       '/socket.io': {
-        target: 'https://brain-blitz-xx0i.onrender.com',
+        target: 'http://localhost:3000',
         changeOrigin: true,
         ws: true,
       }

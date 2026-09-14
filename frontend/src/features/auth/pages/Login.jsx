@@ -54,9 +54,8 @@ const handleSubmit = async (e) => {
 };
 
 const GoogleLogin = () => {
-   const backendUrl = import.meta.env.VITE_BACKEND_URL || "https://brain-blitz-xx0i.onrender.com";
-    window.location.href =  `${backendUrl}/api/auth/google`; 
-  };
+  window.location.href = `/api/auth/google`;
+};
 
   if (!loading && user) {
     return <Navigate to="/" replace />;

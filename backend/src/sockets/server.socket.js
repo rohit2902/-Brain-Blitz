@@ -8,7 +8,7 @@ let io;
 export async function initSocket (httpServer) {
     io = new Server(httpServer , {
         cors:{
-            origin: process.env.FRONTED_URL,
+            origin: process.env.FRONTEND_URL,
             credentials:true
         }
     })
