@@ -22,7 +22,20 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(helmet()); 
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        connectSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        // Google login ke liye zaroori ho sakta hai:
+        frameSrc: ["'self'", "https://accounts.google.com"],
+        imgSrc: ["'self'", "data:", "https://lh3.googleusercontent.com"],
+      },
+    },
+  })
+);
 app.use(passport.initialize());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -60,7 +73,7 @@ passport.use(new GoogleStrategy(
   {
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-     callbackURL: process.env.GOOGLE_CALLBACK_URL ,
+     callbackURL: "https://brain-blitz-xx0i.onrender.com/api/auth/google/callback" ,
   },
   (accessToken, refreshToken, profile, done) => {
  
