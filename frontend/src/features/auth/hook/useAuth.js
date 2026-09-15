@@ -7,7 +7,8 @@ export function useAuth() {
   const dispatch = useDispatch();
 
   const { user, loading, error } = useSelector((state) => state.auth);
-    const [showVerifyModal, setShowVerifyModal] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
+  const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState("");
 
   async function handleRegister({ name, email, password }) {
@@ -35,11 +36,15 @@ export function useAuth() {
     try {
       dispatch(setLoading(true));
       const data = await login({ email, password });
-      dispatch(setUser(data.user));
-          if (data?.success) {
-      window.location.replace("/");
-    return;
-  }
+      const loggedInUser = data?.data?.user || data?.user;
+      if (loggedInUser) {
+        dispatch(setUser(loggedInUser));
+      }
+      if (data?.success) {
+        window.location.replace("/");
+        return data;
+      }
+      return data;
     } catch (error) {
       dispatch(setError(error.response?.data?.message || "Login failed"));
       throw error;
@@ -52,17 +57,14 @@ export function useAuth() {
     try {
       dispatch(setLoading(true));
       const data = await getMe();
-      
-
-     
-     
-      dispatch(setUser(data.data));
-   
+      const fetchedUser = data?.data?.user || data?.data;
+      dispatch(setUser(fetchedUser));
     } catch (error) {
       dispatch(setError(error.response?.data?.message || "Failed to fetch user data"));
       dispatch(setUser(null));
     } finally {
       dispatch(setLoading(false));
+      setIsInitializing(false);
     }
   }
 
@@ -128,6 +130,7 @@ export function useAuth() {
     user,
     loading,
     error,
+    isInitializing,
     showVerifyModal,
     setShowVerifyModal,
     registeredEmail,
