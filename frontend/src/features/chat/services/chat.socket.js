@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 
 export const initializeSocketConnection = () => {
 
-    const socket = io(import.meta.env.VITE_BACKEND_URL || "https://brain-blitz-xx0i.onrender.com", {
+    const socket = io(import.meta.env.VITE_BACKEND_URL || undefined, {
     withCredentials: true,
 });
 

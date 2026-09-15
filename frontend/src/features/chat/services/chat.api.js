@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_BACKEND_URL || "https://brain-blitz-xx0i.onrender.com",
+    baseURL: import.meta.env.VITE_BACKEND_URL || "",
     withCredentials: true,
 })
 
@@ -88,7 +88,7 @@ const api = axios.create({
 // };
 
 export const sendMessage = async ({ message, chatId, onChunk, onMeta, signal }) => {
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || "https://brain-blitz-xx0i.onrender.com";
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
   const response = await fetch(`${backendUrl}/api/chats/message`, {
     method: "POST",
     headers: {

@@ -54,7 +54,7 @@ const Register = () => {
   };
 
 const GoogleLogin = () => {
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || "https://brain-blitz-xx0i.onrender.com";
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
   window.location.href = `${backendUrl}/api/auth/google`;
 };
 
