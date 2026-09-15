@@ -60,7 +60,7 @@ passport.use(new GoogleStrategy(
   {
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-     callbackURL: "https://brain-blitz-xx0i.onrender.com/api/auth/google/callback" ,
+     callbackURL: process.env.GOOGLE_CALLBACK_URL || "https://brain-blitz-xx0i.onrender.com/api/auth/google/callback",
   },
   (accessToken, refreshToken, profile, done) => {
  

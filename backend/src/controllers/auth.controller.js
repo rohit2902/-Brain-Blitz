@@ -122,7 +122,7 @@ export const verifyEmailController = asyncHandler(async (req, res) => {
                 Your email has been verified. Your BrainBlitz account is fully set up and ready to go.
               </p>
               <div style="margin:40px 0;">
-                <a href="${process.env.FRONTEND_URL}/login" style="display:inline-block;padding:14px 30px;background:#FF7A1A;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:bold;">
+                <a href="${process.env.FRONTEND_URL || ""}/login" style="display:inline-block;padding:14px 30px;background:#FF7A1A;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:bold;">
                   Go to Login
                 </a>
               </div>
@@ -251,7 +251,7 @@ export const googleAuthController = asyncHandler(async (req, res) => {
   const username = userProfile.displayName;
   const avatar = userProfile.photos?.[0]?.value;
   if (!email) {
-    const frontendUrl = process.env.FRONTEND_URL ;
+    const frontendUrl = process.env.FRONTEND_URL || "";
     return res.redirect(`${frontendUrl}/login?error=no_email`);
   }
 
@@ -284,8 +284,9 @@ export const googleAuthController = asyncHandler(async (req, res) => {
     sameSite: "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
-  const frontendUrl = process.env.FRONTEND_URL ;
-  res.redirect(frontendUrl + "/");
+  const frontendUrl = process.env.FRONTEND_URL || "";
+  const redirectUrl = frontendUrl ? `${frontendUrl}/` : "/";
+  res.redirect(redirectUrl);
 });
 
 export const forgetPasswordController = asyncHandler(async (req, res) => {
